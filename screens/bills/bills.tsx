@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { lightStyles, darkStyles } from "./styles";
-import { StatusBar } from "expo-status-bar";
 import { useRecoilValue } from "recoil";
 import { Theme } from "typings/theme";
 import { themeAtom } from "atoms";
+import { MainScreenHeader } from "components/elements";
 
 const Bill = () => {
 
@@ -12,7 +12,7 @@ const Bill = () => {
 
   return (
     <View style={currentTheme === "dark" ? darkStyles.Container : lightStyles.Container}>
-      <Text style={currentTheme === "dark" ? darkStyles.Text : lightStyles.Text}>Bill</Text>
+      <MainScreenHeader title="My Bills" />
     </View>
   );
 };
