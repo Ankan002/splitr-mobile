@@ -2,8 +2,8 @@ import "dotenv/config";
 
 export default {
   expo: {
-    name: "spitr-mobile",
-    slug: "spitr-mobile",
+    name: "SplitR",
+    slug: "splitr-mobile",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
