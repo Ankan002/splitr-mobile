@@ -1,6 +1,41 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "screens/*": [
+        "screens/*"
+      ],
+      "navigation/*": [
+        "navigation/*"
+      ],
+      "components/*": [
+        "components/*"
+      ],
+      "atoms/*": [
+        "atoms/*"
+      ],
+      "helpers/*": [
+        "helpers/*"
+      ],
+      "typings/*": [
+        "typings/*"
+      ],
+      "themes/*": [
+        "themes/*"
+      ],
+      "constants/*": [
+        "constants/*"
+      ],
+      "modals/*": [
+        "modals/*"
+      ],
+      "config/*": [
+        "config/*"
+      ]
+    },
+    "typeRoots": ["node_modules/@types"],
+    "noImplicitAny": true
   }
 }

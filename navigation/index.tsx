@@ -1,107 +1,102 @@
-/**
- * If you are not familiar with React Navigation, refer to the "Fundamentals" guide:
- * https://reactnavigation.org/docs/getting-started
- *
- */
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import * as React from 'react';
-import { ColorSchemeName, Pressable } from 'react-native';
+import React, {useEffect, useRef} from 'react';
 
-import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
+import { colors } from "constants/Colors";
+import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
+import { Groups, Bills, Settings } from "screens";
+import { useRecoilState } from 'recoil';
+import { themeAtom } from 'atoms';
+import { Theme } from 'typings/theme';
+import { StatusBar } from 'expo-status-bar';
+import { getSavedTheme } from 'helpers';
+import { DarkNavigatorTheme, LightNavigatorTheme } from 'themes';
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation() {
+
+  const [currentTheme, setCurrentTheme] = useRecoilState<Theme>(themeAtom);
+
+  const isMounted = useRef<boolean>(false);
+
+  const onLoad = async () => {
+    const savedTheme = await getSavedTheme();
+    setCurrentTheme(savedTheme);
+  }
+
+  useEffect(() => {
+    if(isMounted.current) return;
+
+    isMounted.current = true;
+    
+    onLoad()
+    .catch(e => console.log(e));
+  }, []);
+
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <RootNavigator />
-    </NavigationContainer>
+    <>
+    <StatusBar style={currentTheme === "dark" ? "light" : "dark"} />
+      <NavigationContainer
+        linking={LinkingConfiguration}
+        theme={currentTheme === "dark" ? DarkNavigatorTheme : LightNavigatorTheme}>
+        <RootNavigator />
+      </NavigationContainer>
+    </>
+    
   );
 }
 
-/**
- * A root stack navigator is often used for displaying modals on top of all other content.
- * https://reactnavigation.org/docs/modal
- */
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-function RootNavigator() {
+const RootNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
+        <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+      </Stack.Navigator>
   );
 }
 
-/**
- * A bottom tab navigator displays tab buttons on the bottom of the display to switch screens.
- * https://reactnavigation.org/docs/bottom-tab-navigator
- */
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
-function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
-
+const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Groups"
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
+        tabBarActiveTintColor: colors.primaryOrange,
+        tabBarInactiveTintColor: colors.lightGrey,
+        headerShown: false,
       }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneScreen}
-        options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate('Modal')}
-              style={({ pressed }) => ({
-                opacity: pressed ? 0.5 : 1,
-              })}>
-              <FontAwesome
-                name="info-circle"
-                size={25}
-                color={Colors[colorScheme].text}
-                style={{ marginRight: 15 }}
-              />
-            </Pressable>
-          ),
-        })}
+        name="Groups"
+        component={Groups}
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color }) => <FontAwesome name="group" size={25} color={color} />,
+          tabBarShowLabel: false
+        }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoScreen}
+        name="Bills"
+        component={Bills}
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Bills",
+          tabBarIcon: ({ color }) => <Ionicons name="ios-newspaper" size={25} color={color} />,
+          tabBarShowLabel: false
+        }}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => <Ionicons name="md-settings-sharp" size={25} color={color} />,
+          tabBarShowLabel: false
         }}
       />
     </BottomTab.Navigator>
   );
-}
-
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }
