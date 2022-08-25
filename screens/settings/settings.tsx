@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import { themeAtom } from "atoms";
 import { Theme } from "typings/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { MainScreenHeader } from "components/elements";
+import { MainScreenHeader, ToggleSwitch } from "components/elements";
 
 const Settings = () => {
 
@@ -25,7 +25,11 @@ const Settings = () => {
   return (
     <View style={currentTheme === "dark" ? darkStyles.Container : lightStyles.Container}>
       <MainScreenHeader title="Settings" />
-      <Button title="Change Theme" onPress={changeTheme} />
+      <ToggleSwitch 
+        title="Dark Theme" 
+        value={currentTheme === "dark"} 
+        onChange={changeTheme} 
+      />
     </View>
   );
 };
