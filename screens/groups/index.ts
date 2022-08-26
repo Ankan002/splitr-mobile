@@ -1,1 +1,1 @@
-export { default as Groups } from "./home";
+export { default as GroupsScreen } from "./home";

@@ -1,20 +1,20 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
-import { lightStyles, darkStyles } from "./styles";
 import { useRecoilValue } from "recoil";
 import { Theme } from "typings/theme";
+import { lightStyles, darkStyles } from "./styles";
 import { themeAtom } from "atoms";
 import { MainScreenHeader } from "components/elements";
 
-const Bill = () => {
+const MyContributions = () => {
 
-  const currentTheme = useRecoilValue<Theme>(themeAtom);
+  const currentTheme = useRecoilValue<Theme>(themeAtom);  
 
   return (
     <View style={currentTheme === "dark" ? darkStyles.Container : lightStyles.Container}>
-      <MainScreenHeader title="My Bills" />
+      <MainScreenHeader title="My Contributions" />
     </View>
   );
 };
 
-export default Bill;
+export default MyContributions;

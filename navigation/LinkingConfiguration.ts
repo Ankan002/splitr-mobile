@@ -16,12 +16,12 @@ const linking: LinkingOptions<RootStackParamList> = {
       Root: {
         screens: {
           Groups: "*",
-          Bills: "*",
-          Settings: "*"
+          MyBills: "*",
+          Settings: "*",
+          MyContributions: "*",
         },
       },
-      Modal: 'modal',
-      NotFound: '*',
+      Login: "*"
     },
   },
 };
