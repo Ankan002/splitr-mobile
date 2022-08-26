@@ -14,6 +14,7 @@ import { Theme } from 'typings/theme';
 import { StatusBar } from 'expo-status-bar';
 import { getSavedTheme } from 'helpers';
 import { DarkNavigatorTheme, LightNavigatorTheme } from 'themes';
+import { verifyLoggedIn } from 'helpers';
 
 export default function Navigation() {
 
@@ -25,6 +26,8 @@ export default function Navigation() {
   const onLoad = async () => {
     const savedTheme = await getSavedTheme();
     setCurrentTheme(savedTheme);
+    const isUserLoggedIn = await verifyLoggedIn();
+    setIsAuthenticated(isUserLoggedIn);
   }
 
   useEffect(() => {
