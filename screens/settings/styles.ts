@@ -11,6 +11,15 @@ const styles = (theme: Theme) => {
         },
         Text: {
             color: theme === "dark" ? colors.primaryLight : colors.primaryDark
+        },
+        BodyContainer: {
+            flex: 1,
+        },
+        LogoutContainer: {
+            paddingHorizontal: 15,
+            paddingVertical: 10,
+            justifyContent: "center",
+            alignItems: "center"
         }
     });
 };
