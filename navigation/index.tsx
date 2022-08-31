@@ -9,7 +9,7 @@ import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { GroupsScreen, MyBillsScreen, SettingsScreen, LoginScreen, MyContributions } from "screens";
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { isAuthenticatedAtom, loggedInUserAtom, themeAtom } from 'atoms';
+import { initialLoadingAtom, isAuthenticatedAtom, loggedInUserAtom, themeAtom } from 'atoms';
 import { Theme } from 'typings/theme';
 import { StatusBar } from 'expo-status-bar';
 import { getSavedTheme } from 'helpers';
@@ -21,11 +21,20 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
 import { LoggedInUser } from 'typings/user';
 
+const timeOutFunc = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("Loading done...");
+    }, 10000);
+  })
+}
+
 export default function Navigation() {
 
   const [currentTheme, setCurrentTheme] = useRecoilState<Theme>(themeAtom);
   const [isAuthenticated, setIsAuthenticated] = useRecoilState<boolean>(isAuthenticatedAtom);
   const setLoggedInUser = useSetRecoilState<LoggedInUser>(loggedInUserAtom);
+  const [initialLoading, setInitialLoading] = useRecoilState<boolean>(initialLoadingAtom);
 
   GoogleSignin.configure({
     webClientId: Constants.manifest?.extra?.webClientId
@@ -41,9 +50,15 @@ export default function Navigation() {
   }
 
   const onAuthenticated = async () => {
+    if(initialLoading) return;
+
+    setInitialLoading(true);
+
     const userResponse = await fetchLoggedInUser();
 
     if(!userResponse.success){
+      setInitialLoading(false);
+      console.log(userResponse);
       await GoogleSignin.signOut();
       setLoggedInUser({});
       setIsAuthenticated(false);
@@ -52,6 +67,12 @@ export default function Navigation() {
     }
 
     setLoggedInUser(userResponse.user);
+
+    const resolvedData = await timeOutFunc();
+
+    console.log(resolvedData);
+
+    setInitialLoading(false);
 
     console.log(userResponse.user);
   }
@@ -68,7 +89,8 @@ export default function Navigation() {
   useEffect(() => {
     if(!isAuthenticated) return;
 
-    onAuthenticated();
+    onAuthenticated()
+    .catch(e => console.log(e));
   }, [isAuthenticated])
 
   return (

@@ -1,8 +1,8 @@
 import { View, ScrollView } from "react-native";
 import React from "react";
 import { lightStyles, darkStyles } from "./styles";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { themeAtom, isAuthenticatedAtom, loggedInUserAtom } from "atoms";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { themeAtom, isAuthenticatedAtom, loggedInUserAtom, initialLoadingAtom } from "atoms";
 import { Theme } from "typings/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogoutButton, MainScreenHeader, ToggleSwitch } from "components/elements";
@@ -15,6 +15,7 @@ const Settings = () => {
   const [currentTheme, setCurrentTheme] = useRecoilState<Theme>(themeAtom);
   const setAuthenticated = useSetRecoilState<boolean>(isAuthenticatedAtom);
   const setLoggedInUser = useSetRecoilState<LoggedInUser>(loggedInUserAtom);
+  const initialLoading = useRecoilValue<boolean>(initialLoadingAtom);
 
   GoogleSignin.configure({
     webClientId: Constants.manifest?.extra?.webClientId
@@ -32,6 +33,10 @@ const Settings = () => {
   }
 
   const onLogoutClick = async() => {
+    if(initialLoading) {
+      console.log("Syncing your data... hold on for a moment");
+      return;
+    }
     await AsyncStorage.removeItem("authToken");
     await GoogleSignin.signOut();
     setLoggedInUser({});
