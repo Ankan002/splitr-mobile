@@ -8,6 +8,7 @@ import { AuthButton } from "components/elements";
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import Constants from "expo-constants";
 import { login } from "helpers";
+import { showToast } from "helpers/toast";
 
 const LoginSection = () => {
 
@@ -20,11 +21,18 @@ const LoginSection = () => {
   });
 
   const onLoginClick = async() => {
-    //TODO: Add a toast library here for better understanding
-    try{
-      if(isLoggingIn) return;
+    if(isLoggingIn) {
+      showToast({
+        type: "error",
+        heading: "Logging In...",
+        body: "We are loggin you in..."
+      });
 
-      setIsLogginIn(true);
+      return;
+    }
+
+    setIsLogginIn(true);
+    try{
       const user = await GoogleSignin.signIn();
     
       if(!user.idToken) {
@@ -37,10 +45,20 @@ const LoginSection = () => {
       setIsLogginIn(false);
 
       if(!response.success) {
-        //TODO: Add a toast library here for better understanding
-        console.log(response.error);
+        showToast({
+          type: "error",
+          heading: "Login Error",
+          body: `${response.error}`
+        });
+
         return;
       }
+
+      showToast({
+        type: "success",
+        heading: "Login Successful",
+        body: "Successfully logged in..."
+      });
 
       setIsAuthenticated(true);
     }

@@ -20,6 +20,7 @@ import { Alert } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
 import { LoggedInUser } from 'typings/user';
+import { showToast } from 'helpers/toast';
 
 const timeOutFunc = () => {
   return new Promise((resolve, reject) => {
@@ -62,15 +63,17 @@ export default function Navigation() {
       await GoogleSignin.signOut();
       setLoggedInUser({});
       setIsAuthenticated(false);
-      Alert.alert("Session Expired... please login again to continue");
+      
+      showToast({
+        type: "error",
+        heading: "Session Expired",
+        body: "Please login again to continue"
+      });
+
       return;
     }
 
     setLoggedInUser(userResponse.user);
-
-    const resolvedData = await timeOutFunc();
-
-    console.log(resolvedData);
 
     setInitialLoading(false);
 

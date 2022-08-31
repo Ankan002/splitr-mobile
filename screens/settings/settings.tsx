@@ -9,6 +9,7 @@ import { LogoutButton, MainScreenHeader, ToggleSwitch } from "components/element
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Constants from "expo-constants";
 import { LoggedInUser } from "typings/user";
+import { showToast } from "helpers/toast";
 
 const Settings = () => {
 
@@ -34,7 +35,12 @@ const Settings = () => {
 
   const onLogoutClick = async() => {
     if(initialLoading) {
-      console.log("Syncing your data... hold on for a moment");
+      showToast({
+        type: "error",
+        heading: "Syncing...",
+        body: "We are syncing your data... hold on!!!"
+      });
+
       return;
     }
     await AsyncStorage.removeItem("authToken");
