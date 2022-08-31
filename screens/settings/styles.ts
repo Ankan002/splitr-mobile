@@ -20,6 +20,14 @@ const styles = (theme: Theme) => {
             paddingVertical: 10,
             justifyContent: "center",
             alignItems: "center"
+        },
+        LoadingPlaceholder: {
+            paddingHorizontal: 15,
+            marginVertical: 15
+        },
+        LoadingPlaceholderLine: {
+            marginVertical: 2,
+            backgroundColor: theme === "dark" ? colors.primaryDark: colors.primaryLight
         }
     });
 };

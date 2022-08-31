@@ -16,19 +16,10 @@ import { getSavedTheme } from 'helpers';
 import { DarkNavigatorTheme, LightNavigatorTheme } from 'themes';
 import { verifyLoggedIn } from 'helpers';
 import { fetchLoggedInUser } from 'helpers/user';
-import { Alert } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Constants from 'expo-constants';
 import { LoggedInUser } from 'typings/user';
 import { showToast } from 'helpers/toast';
-
-const timeOutFunc = () => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("Loading done...");
-    }, 10000);
-  })
-}
 
 export default function Navigation() {
 

@@ -9,5 +9,7 @@ export const colors = {
     primaryYellow: "#F6BA3D",
     semiTransparent: "rgba(0, 0, 0, 0.6)",
     primaryGreen: "#08CD92",
-    primaryRed: "#D61C4E"
+    primaryRed: "#D61C4E",
+    boneColor: "#B5BAC7",
+    highlightColor: "#ebebeb"
 }

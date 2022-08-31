@@ -1,4 +1,4 @@
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, Text, Dimensions } from "react-native";
 import React from "react";
 import { lightStyles, darkStyles } from "./styles";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
@@ -10,6 +10,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Constants from "expo-constants";
 import { LoggedInUser } from "typings/user";
 import { showToast } from "helpers/toast";
+import { Placeholder, PlaceholderLine, Fade } from "rn-placeholder";
 
 const Settings = () => {
 
@@ -62,6 +63,22 @@ const Settings = () => {
             value={currentTheme === "dark"} 
             onChange={changeTheme} 
           />
+
+          {
+            initialLoading && (
+              <Placeholder
+                Animation={Fade}
+                style={currentTheme === "dark" ? darkStyles.LoadingPlaceholder : lightStyles.LoadingPlaceholder}
+              >
+                {
+                  [...Array(2)].map((item, index) => (
+                    <PlaceholderLine height={20} width={100} style={currentTheme==="dark" ? darkStyles.LoadingPlaceholderLine : lightStyles.LoadingPlaceholder} key={index} />
+                  ))
+                }
+              </Placeholder>
+            )
+          }
+          
 
         </ScrollView>
         
