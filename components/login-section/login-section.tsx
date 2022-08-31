@@ -5,7 +5,7 @@ import { Theme } from "typings/theme";
 import { themeAtom, isAuthenticatedAtom } from "atoms";
 import { lightStyles, darkStyles } from "./styles";
 import { AuthButton } from "components/elements";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import Constants from "expo-constants";
 import { login } from "helpers";
 
@@ -21,27 +21,36 @@ const LoginSection = () => {
 
   const onLoginClick = async() => {
     //TODO: Add a toast library here for better understanding
-    if(isLoggingIn) return;
+    try{
+      if(isLoggingIn) return;
 
-    setIsLogginIn(true);
-    const user = await GoogleSignin.signIn();
+      setIsLogginIn(true);
+      const user = await GoogleSignin.signIn();
     
-    if(!user.idToken) {
-      Alert.alert("No id received!!");
+      if(!user.idToken) {
+        Alert.alert("No id received!!");
+        setIsLogginIn(false);
+        return;
+      }
+      const response = await login(user.idToken);
+
       setIsLogginIn(false);
-      return;
+
+      if(!response.success) {
+        //TODO: Add a toast library here for better understanding
+        console.log(response.error);
+        return;
+      }
+
+      setIsAuthenticated(true);
     }
-    const response = await login(user.idToken);
-
-    setIsLogginIn(false);
-
-    if(!response.success) {
-      //TODO: Add a toast library here for better understanding
-      console.log(response.error);
-      return;
+    catch(error: any){
+      if(error.code === statusCodes.SIGN_IN_CANCELLED || error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE){
+        setIsLogginIn(false);
+        return;
+      }
     }
-
-    setIsAuthenticated(true);
+    
   };
 
   return (

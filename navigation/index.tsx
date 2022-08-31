@@ -8,18 +8,28 @@ import { colors } from "constants/Colors";
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import { GroupsScreen, MyBillsScreen, SettingsScreen, LoginScreen, MyContributions } from "screens";
-import { useRecoilState } from 'recoil';
-import { isAuthenticatedAtom, themeAtom } from 'atoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { isAuthenticatedAtom, loggedInUserAtom, themeAtom } from 'atoms';
 import { Theme } from 'typings/theme';
 import { StatusBar } from 'expo-status-bar';
 import { getSavedTheme } from 'helpers';
 import { DarkNavigatorTheme, LightNavigatorTheme } from 'themes';
 import { verifyLoggedIn } from 'helpers';
+import { fetchLoggedInUser } from 'helpers/user';
+import { Alert } from 'react-native';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Constants from 'expo-constants';
+import { LoggedInUser } from 'typings/user';
 
 export default function Navigation() {
 
   const [currentTheme, setCurrentTheme] = useRecoilState<Theme>(themeAtom);
   const [isAuthenticated, setIsAuthenticated] = useRecoilState<boolean>(isAuthenticatedAtom);
+  const setLoggedInUser = useSetRecoilState<LoggedInUser>(loggedInUserAtom);
+
+  GoogleSignin.configure({
+    webClientId: Constants.manifest?.extra?.webClientId
+  });
 
   const isMounted = useRef<boolean>(false);
 
@@ -30,6 +40,22 @@ export default function Navigation() {
     setIsAuthenticated(isUserLoggedIn);
   }
 
+  const onAuthenticated = async () => {
+    const userResponse = await fetchLoggedInUser();
+
+    if(!userResponse.success){
+      await GoogleSignin.signOut();
+      setLoggedInUser({});
+      setIsAuthenticated(false);
+      Alert.alert("Session Expired... please login again to continue");
+      return;
+    }
+
+    setLoggedInUser(userResponse.user);
+
+    console.log(userResponse.user);
+  }
+
   useEffect(() => {
     if(isMounted.current) return;
 
@@ -38,6 +64,12 @@ export default function Navigation() {
     onLoad()
     .catch(e => console.log(e));
   }, []);
+
+  useEffect(() => {
+    if(!isAuthenticated) return;
+
+    onAuthenticated();
+  }, [isAuthenticated])
 
   return (
     <>
