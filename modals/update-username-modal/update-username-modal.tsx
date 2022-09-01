@@ -8,6 +8,7 @@ import { lightStyles, darkStyles } from "./styles";
 import { toastConfig } from "config/toast-config";
 import Toast from "react-native-toast-message";
 import { showToast } from "helpers/toast";
+import { ModalHeader } from "components/modal-components";
 
 interface Props {
     isUpdateUsernameModalActive: boolean;
@@ -50,7 +51,15 @@ const UpdateUsernameModal = (props: Props) => {
             <View
                 style={currentTheme === "dark" ? darkStyles.UpdateUsernameContainer : lightStyles.UpdateUsernameContainer}
             >
+                <ModalHeader title="Update Username" onClosePressed={onCloseRequested} />
 
+                <View>
+                    
+                </View>
+
+                <View>
+
+                </View>
             </View>
 
         </View>
