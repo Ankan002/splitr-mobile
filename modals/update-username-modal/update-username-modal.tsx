@@ -1,4 +1,4 @@
-import { View, Text, Modal, ScrollView } from "react-native";
+import { View, Modal, Keyboard } from "react-native";
 import React, { useState } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { themeAtom, loggedInUserAtom } from "atoms";
@@ -9,7 +9,8 @@ import { toastConfig } from "config/toast-config";
 import Toast from "react-native-toast-message";
 import { showToast } from "helpers/toast";
 import { ImmutableTextDisplay, ModalHeader } from "components/modal-components";
-import { SingleLineTextInput } from "components/elements";
+import { ActionButton, SingleLineTextInput } from "components/elements";
+import { updateUsername } from "helpers/user";
 
 interface Props {
     isUpdateUsernameModalActive: boolean;
@@ -39,6 +40,50 @@ const UpdateUsernameModal = (props: Props) => {
     if(isUpdateUsernameModalActive) setIsUpdateUsernameModalActive(false);
   };
 
+  const onUpdateUsernameClick = async() => {
+    if(isUpdating) {
+        showToast({
+            type: "error",
+            heading: "Updating...",
+            body: "Hold on while we update the username"
+        });
+
+        return;
+    }
+
+    setIsUpdating(true);
+
+    Keyboard.dismiss();
+
+    const response = await updateUsername(newUsername.trim());
+
+    setNewUsername("");
+    setIsUpdating(false);
+
+    if(!response.success){
+        showToast({
+            type: "error",
+            heading: "Oh no...",
+            body: response.error
+        });
+
+        return;
+    }
+
+    setLoggedInUser({
+        ...loggedInUser,
+        username: response.username
+    });
+
+    if(isUpdateUsernameModalActive) setIsUpdateUsernameModalActive(false);
+
+    showToast({
+        type: "success",
+        heading: "Yeah...",
+        body: "Successfully updated username"
+    });
+  }
+
   return (
     <Modal
         visible={isUpdateUsernameModalActive}
@@ -55,13 +100,13 @@ const UpdateUsernameModal = (props: Props) => {
             >
                 <ModalHeader title="Update Username" onClosePressed={onCloseRequested} />
 
-                <View>
+                <View style={currentTheme === "dark" ? darkStyles.BodyContainer : lightStyles.BodyContainer}>
                     <ImmutableTextDisplay title="Old Username" displayText={loggedInUser.username ?? ""} />
                     <SingleLineTextInput onChangeText={setNewUsername} value={newUsername} placeholder="New username" title="New Username" />
                 </View>
 
-                <View>
-
+                <View style={currentTheme === "dark" ? darkStyles.ActionButtonContainer : lightStyles.ActionButtonContainer}>
+                    <ActionButton title="Update Username" onPress={onUpdateUsernameClick} loading={isUpdating} />
                 </View>
             </View>
 

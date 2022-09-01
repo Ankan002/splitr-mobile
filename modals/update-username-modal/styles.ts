@@ -23,6 +23,17 @@ const styles = (theme: Theme) => {
             borderTopRightRadius: 30,
             paddingVertical: 10
         },
+        BodyContainer: {
+            flex: 1,
+        },
+        ActionButtonContainer: {
+            width: "100%",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            marginVertical: 10,
+            paddingHorizontal: 15
+        }
     });
 };
 
