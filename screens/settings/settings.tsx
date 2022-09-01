@@ -11,6 +11,7 @@ import Constants from "expo-constants";
 import { LoggedInUser } from "typings/user";
 import { showToast } from "helpers/toast";
 import { Placeholder, PlaceholderLine, Fade } from "rn-placeholder";
+import { UpdateUsernameModal } from "modals/update-username-modal";
 
 const Settings = () => {
 
@@ -53,7 +54,7 @@ const Settings = () => {
   }
 
   const onUpdateUsernameOptionClick = () => {
-    console.log("Update username option clicked");
+    setIsUpdateUsernameModalActive(!isUpdateUsernameModalActive);
   };
 
   return (
@@ -98,6 +99,8 @@ const Settings = () => {
         <LogoutButton title="Logout" onPress={onLogoutClick} />
       </View>
       
+
+      <UpdateUsernameModal isUpdateUsernameModalActive={isUpdateUsernameModalActive} setIsUpdateUsernameModalActive={setIsUpdateUsernameModalActive} />
     </View>
   );
 };
