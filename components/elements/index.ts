@@ -3,3 +3,4 @@ export * from "./toggle-switch";
 export * from "./auth-header";
 export * from "./auth-button";
 export * from "./logout-button";
+export * from "./settings-option";

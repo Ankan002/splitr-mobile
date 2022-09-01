@@ -1,11 +1,11 @@
-import { View, ScrollView, Text, Dimensions } from "react-native";
-import React from "react";
+import { View, ScrollView } from "react-native";
+import React, { useState } from "react";
 import { lightStyles, darkStyles } from "./styles";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { themeAtom, isAuthenticatedAtom, loggedInUserAtom, initialLoadingAtom } from "atoms";
 import { Theme } from "typings/theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { LogoutButton, MainScreenHeader, ToggleSwitch } from "components/elements";
+import { LogoutButton, MainScreenHeader, SettingsOptions, ToggleSwitch } from "components/elements";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Constants from "expo-constants";
 import { LoggedInUser } from "typings/user";
@@ -18,6 +18,8 @@ const Settings = () => {
   const setAuthenticated = useSetRecoilState<boolean>(isAuthenticatedAtom);
   const setLoggedInUser = useSetRecoilState<LoggedInUser>(loggedInUserAtom);
   const initialLoading = useRecoilValue<boolean>(initialLoadingAtom);
+
+  const [isUpdateUsernameModalActive, setIsUpdateUsernameModalActive] = useState<boolean>(false);
 
   GoogleSignin.configure({
     webClientId: Constants.manifest?.extra?.webClientId
@@ -50,6 +52,10 @@ const Settings = () => {
     setAuthenticated(false);
   }
 
+  const onUpdateUsernameOptionClick = () => {
+    console.log("Update username option clicked");
+  };
+
   return (
     <View style={currentTheme === "dark" ? darkStyles.Container : lightStyles.Container}>
       <MainScreenHeader title="Settings" />
@@ -65,7 +71,7 @@ const Settings = () => {
           />
 
           {
-            initialLoading && (
+            initialLoading ? (
               <Placeholder
                 Animation={Fade}
                 style={currentTheme === "dark" ? darkStyles.LoadingPlaceholder : lightStyles.LoadingPlaceholder}
@@ -76,6 +82,10 @@ const Settings = () => {
                   ))
                 }
               </Placeholder>
+            ) : (
+              <>
+                <SettingsOptions title="Update Username" onPress={onUpdateUsernameOptionClick} />
+              </>
             )
           }
           
