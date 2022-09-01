@@ -1,4 +1,4 @@
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { themeAtom, loggedInUserAtom } from "atoms";
@@ -9,6 +9,7 @@ import { toastConfig } from "config/toast-config";
 import Toast from "react-native-toast-message";
 import { showToast } from "helpers/toast";
 import { ImmutableTextDisplay, ModalHeader } from "components/modal-components";
+import { SingleLineTextInput } from "components/elements";
 
 interface Props {
     isUpdateUsernameModalActive: boolean;
@@ -22,6 +23,7 @@ const UpdateUsernameModal = (props: Props) => {
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const currentTheme = useRecoilValue<Theme>(themeAtom);
   const [loggedInUser, setLoggedInUser] = useRecoilState<LoggedInUser>(loggedInUserAtom);
+  const [newUsername, setNewUsername] = useState<string>("");
 
   const onCloseRequested = () => {
     if(isUpdating) {
@@ -55,6 +57,7 @@ const UpdateUsernameModal = (props: Props) => {
 
                 <View>
                     <ImmutableTextDisplay title="Old Username" displayText={loggedInUser.username ?? ""} />
+                    <SingleLineTextInput onChangeText={setNewUsername} value={newUsername} placeholder="New username" title="New Username" />
                 </View>
 
                 <View>
