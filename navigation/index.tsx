@@ -7,7 +7,7 @@ import React, {useEffect, useRef} from 'react';
 import { colors } from "constants/Colors";
 import { RootStackParamList, RootTabParamList } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
-import { GroupsScreen, MyBillsScreen, SettingsScreen, LoginScreen, MyContributions } from "screens";
+import { GroupsScreen, MyBillsScreen, SettingsScreen, LoginScreen, MyContributions, CreateGroup } from "screens";
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { initialLoadingAtom, isAuthenticatedAtom, loggedInUserAtom, themeAtom } from 'atoms';
 import { Theme } from 'typings/theme';
@@ -121,6 +121,9 @@ const RootNavigator = () => {
   return (
     <Stack.Navigator>
         <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="CreateGroup" component={CreateGroup} options={{
+          headerShown: false
+        }} />
       </Stack.Navigator>
   );
 }

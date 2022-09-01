@@ -5,13 +5,15 @@ import { useRecoilValue } from "recoil";
 import { themeAtom } from "atoms";
 import { Theme } from "typings/theme";
 import { FloatingCreateButton, MainScreenHeader } from "components/elements";
+import { useNavigation } from "@react-navigation/native";
 
 const Groups = () => {
 
   const currentTheme = useRecoilValue<Theme>(themeAtom);
+  const navigation = useNavigation();
 
   const onCreateGroupClick = () => {
-    console.log("Create Btn...");
+    navigation.navigate("CreateGroup");
   }
 
   return (
