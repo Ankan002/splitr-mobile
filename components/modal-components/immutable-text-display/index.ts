@@ -1,0 +1,1 @@
+export { default as ImmutableTextDisplay } from "./immutable-text-display";

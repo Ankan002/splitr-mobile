@@ -8,7 +8,7 @@ import { lightStyles, darkStyles } from "./styles";
 import { toastConfig } from "config/toast-config";
 import Toast from "react-native-toast-message";
 import { showToast } from "helpers/toast";
-import { ModalHeader } from "components/modal-components";
+import { ImmutableTextDisplay, ModalHeader } from "components/modal-components";
 
 interface Props {
     isUpdateUsernameModalActive: boolean;
@@ -54,7 +54,7 @@ const UpdateUsernameModal = (props: Props) => {
                 <ModalHeader title="Update Username" onClosePressed={onCloseRequested} />
 
                 <View>
-                    
+                    <ImmutableTextDisplay title="Old Username" displayText={loggedInUser.username ?? ""} />
                 </View>
 
                 <View>
