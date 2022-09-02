@@ -4,7 +4,7 @@ import { useRecoilValue } from "recoil";
 import { Theme } from "typings/theme";
 import { themeAtom } from "atoms";
 import { lightStyles, darkStyles } from "./styles";
-import { EmptyGroupImagePreview, NestedScreenHeader, SingleLineTextInput } from "components/elements";
+import { EmptyGroupImagePreview, ItemTitle, NestedScreenHeader, SingleLineTextInput } from "components/elements";
 import { useNavigation } from "@react-navigation/native";
 import { DocumentPickerResponse } from "react-native-document-picker";
 
@@ -32,6 +32,10 @@ const CreateGroup = () => {
       <View style={currentTheme==="dark" ? darkStyles.Body : lightStyles.Body}>
 
         <SingleLineTextInput title="Group Name" value={groupName} onChangeText={setGroupName} placeholder="Group Name" />
+
+        <ItemTitle title="Selected Members" />
+
+        <ItemTitle title="Group Image Preview" />
 
         {
           !selectedImage && (

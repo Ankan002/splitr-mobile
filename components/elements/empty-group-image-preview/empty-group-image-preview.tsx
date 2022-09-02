@@ -23,7 +23,7 @@ const EmptyGroupImagePreview = (props: Props) => {
       <Feather name="upload-cloud" size={40} color={currentTheme === "dark" ? colors.primaryLight : colors.primaryDark} />
       {
         fontsLoaded && (
-            <Text>
+            <Text style={currentTheme === "dark" ? darkStyles.EmptyText : lightStyles.EmptyText}>
                 No images selected... Click here to select one.
             </Text>
         )
