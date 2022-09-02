@@ -11,6 +11,10 @@ const styles = (theme: Theme) => {
         },
         Text: {
             color: theme === "dark" ? colors.primaryLight : colors.primaryDark
+        },
+        Body: {
+            flex: 1,
+            paddingHorizontal: 15
         }
     });
 };

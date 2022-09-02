@@ -7,7 +7,6 @@ const styles = (theme: Theme) => {
         TextInputContainer: {
             width: "100%",
             marginTop: 10,
-            paddingHorizontal: 15
         },
         TitleText: {
             color: theme === "dark" ? colors.primaryLight : colors.primaryDark,

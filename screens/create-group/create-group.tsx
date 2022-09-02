@@ -21,7 +21,12 @@ const CreateGroup = () => {
   return (
     <View style={currentTheme === "dark" ? darkStyles.Container : lightStyles.Container}>
       <NestedScreenHeader title="Create Group" onBack={onGoBack} />
-      <SingleLineTextInput title="Group Name" value={groupName} onChangeText={setGroupName} placeholder="Group Name" />
+
+      <View style={currentTheme==="dark" ? darkStyles.Body : lightStyles.Body}>
+
+        <SingleLineTextInput title="Group Name" value={groupName} onChangeText={setGroupName} placeholder="Group Name" />
+
+      </View>
     </View>
   );
 };

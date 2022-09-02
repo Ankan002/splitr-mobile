@@ -5,7 +5,6 @@ import { colors } from "constants/Colors";
 const styles = (theme: Theme) => {
     return StyleSheet.create({
         Conatiner: {
-            paddingHorizontal: 15,
             marginTop: 10
         },
         TitleText: {

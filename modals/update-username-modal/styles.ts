@@ -25,6 +25,7 @@ const styles = (theme: Theme) => {
         },
         BodyContainer: {
             flex: 1,
+            paddingHorizontal: 15
         },
         ActionButtonContainer: {
             width: "100%",
