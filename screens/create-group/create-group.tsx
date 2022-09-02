@@ -4,18 +4,25 @@ import { useRecoilValue } from "recoil";
 import { Theme } from "typings/theme";
 import { themeAtom } from "atoms";
 import { lightStyles, darkStyles } from "./styles";
-import { NestedScreenHeader, SingleLineTextInput } from "components/elements";
+import { EmptyGroupImagePreview, NestedScreenHeader, SingleLineTextInput } from "components/elements";
 import { useNavigation } from "@react-navigation/native";
+import { DocumentPickerResponse } from "react-native-document-picker";
 
 const CreateGroup = () => {
 
   const currentTheme = useRecoilValue<Theme>(themeAtom);
   const [groupName, setGroupName] = useState<string>("");
 
+  const [selectedImage, setSelectedImage] = useState<DocumentPickerResponse | null>(null);
+
   const navigate = useNavigation();
 
   const onGoBack = () => {
     navigate.goBack();
+  }
+
+  const onGroupImagePreviewClick = () => {
+    console.log("Image preview clicked...");
   }
 
   return (
@@ -25,6 +32,12 @@ const CreateGroup = () => {
       <View style={currentTheme==="dark" ? darkStyles.Body : lightStyles.Body}>
 
         <SingleLineTextInput title="Group Name" value={groupName} onChangeText={setGroupName} placeholder="Group Name" />
+
+        {
+          !selectedImage && (
+            <EmptyGroupImagePreview onPress={onGroupImagePreviewClick} />
+          )
+        }
 
       </View>
     </View>

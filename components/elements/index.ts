@@ -8,3 +8,4 @@ export * from "./single-line-text-input";
 export * from "./action-button";
 export * from "./floating-create-button";
 export * from "./nested-screen-header";
+export * from "./empty-group-image-preview";
