@@ -7,6 +7,7 @@ import { lightStyles, darkStyles } from "./styles";
 import { EmptyGroupImagePreview, ItemTitle, NestedScreenHeader, SingleLineTextInput } from "components/elements";
 import { useNavigation } from "@react-navigation/native";
 import { DocumentPickerResponse } from "react-native-document-picker";
+import { ImagePickerModal } from "modals";
 
 const CreateGroup = () => {
 
@@ -14,6 +15,7 @@ const CreateGroup = () => {
   const [groupName, setGroupName] = useState<string>("");
 
   const [selectedImage, setSelectedImage] = useState<DocumentPickerResponse | null>(null);
+  const [isImagePickerModalVisible, setImagePickerModalVisible] = useState<boolean>(false);
 
   const navigate = useNavigation();
 
@@ -22,7 +24,7 @@ const CreateGroup = () => {
   }
 
   const onGroupImagePreviewClick = () => {
-    console.log("Image preview clicked...");
+    setImagePickerModalVisible(true);
   }
 
   return (
@@ -44,6 +46,8 @@ const CreateGroup = () => {
         }
 
       </View>
+
+      <ImagePickerModal isImagePickerModalActive={isImagePickerModalVisible} setIsImagePickerModalActive={setImagePickerModalVisible} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
     </View>
   );
 };
